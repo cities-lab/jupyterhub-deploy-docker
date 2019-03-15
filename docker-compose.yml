@@ -56,6 +56,16 @@ services:
     command: >
       jupyterhub -f /srv/jupyterhub/jupyterhub_config.py
 
+  ual-workspace:
+      build:
+          context: ual
+          args:
+              DOCKER_NOTEBOOK_IMAGE: ${DOCKER_NOTEBOOK_IMAGE}
+              JUPYTERHUB_VERSION: ${JUPYTERHUB_VERSION}
+
+      image: ual-workspace-py36
+      container_name: ual-workspace-py36
+
 volumes:
   data:
     external:
