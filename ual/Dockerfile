@@ -20,6 +20,10 @@ RUN jupyter labextension install  --clean \
             @jupyterlab/hub-extension
     
 USER jovyan
+# set conda_envs directory for user
+COPY .condarc $HOME
+RUN mkdir conda_envs
+# default launching directory for notebook server
 RUN mv ~/work ~/workspace
 WORKDIR /home/jovyan/workspace
 
