@@ -20,14 +20,15 @@ RUN jupyter labextension install  --clean \
             @jupyterlab/hub-extension
     
 USER jovyan
-WORKDIR /home/jovyan
-RUN mv work workspace
+RUN mv ~/work ~/workspace
+WORKDIR /home/jovyan/workspace
 
 # setup env for ual workspace
 RUN wget https://raw.githubusercontent.com/ual/ual_model_workspace/master/environment.yml && \
     conda update -n base conda && \
     conda env update -f environment.yml && \
-    conda clean --all
+    conda clean --all && \
+    rm environment.yml
 
 # Pull the environment name out of the environment.yml
 #RUN echo "source activate $(head -1 environment.yml | cut -d' ' -f2)" >> ~/.bashrc

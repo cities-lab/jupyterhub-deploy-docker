@@ -3,6 +3,7 @@
 
 # Configuration file for JupyterHub
 import os
+import sys
 
 c = get_config()
 
@@ -31,7 +32,7 @@ c.DockerSpawner.extra_host_config = { 'network_mode': network_name }
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
 # user `jovyan`, and set the notebook directory to `/home/jovyan/work`.
 # We follow the same convention.
-notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan/work'
+notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan/workspace'
 c.DockerSpawner.notebook_dir = notebook_dir
 # Mount the real user's Docker volume on the host to the notebook user's
 # notebook directory in the container
@@ -53,6 +54,16 @@ c.JupyterHub.hub_port = 8080
 c.JupyterHub.port = 443
 c.JupyterHub.ssl_key = os.environ['SSL_KEY']
 c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
+
+# monitor and cull idle single-user servers
+# https://github.com/jupyterhub/jupyterhub/tree/master/examples/cull-idle
+c.JupyterHub.services = [
+    {
+        'name': 'cull-idle',
+        'admin': True,
+        'command': [sys.executable, '/srv/jupyterhub/cull_idle_servers.py', '--timeout=3600'],
+    }
+]
 
 # Authenticate users with GitHub OAuth
 c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'

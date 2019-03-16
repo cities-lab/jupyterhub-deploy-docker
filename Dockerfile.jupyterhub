@@ -19,3 +19,7 @@ RUN chmod 700 /srv/jupyterhub/secrets && \
     chmod 600 /srv/jupyterhub/secrets/*
 
 COPY ./userlist /srv/jupyterhub/userlist
+
+RUN cd /srv/jupyterhub && \
+    wget https://raw.githubusercontent.com/jupyterhub/jupyterhub/master/examples/cull-idle/cull_idle_servers.py
+   
